@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sigloxxi/src/providers/login_form.dart';
 
 class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String texto;
+  final bool isForm;
 
-  const CustomButton({required this.onPressed, required this.texto});
+  const CustomButton(
+      {required this.onPressed, required this.texto, this.isForm = false});
 
   @override
   Widget build(BuildContext context) {
+    final loginForm = Provider.of<LoginFormProvider>(context, listen: false);
     return MaterialButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       disabledColor: Colors.grey,
@@ -20,7 +25,9 @@ class CustomButton extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      onPressed: this.onPressed,
+      onPressed: isForm
+          ? (loginForm.isLoading ? null : this.onPressed)
+          : this.onPressed,
     );
   }
 }

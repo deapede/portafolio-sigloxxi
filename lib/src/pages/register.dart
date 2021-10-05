@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:sigloxxi/src/providers/login_form.dart';
 
 import 'package:sigloxxi/src/widgets/widgets.dart';
 
@@ -23,22 +26,7 @@ class RegisterPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 30),
-                    CustomFormFields(
-                      keyboardType: TextInputType.text,
-                      labelText: 'Nombre',
-                      prefixIcon: Icons.perm_identity,
-                    ),
-                    CustomFormFields(
-                      keyboardType: TextInputType.emailAddress,
-                      labelText: 'Correo electrónico',
-                      prefixIcon: Icons.alternate_email,
-                    ),
-                    CustomFormFields(
-                      keyboardType: TextInputType.text,
-                      labelText: 'Password',
-                      isPassword: true,
-                      prefixIcon: Icons.lock_outline,
-                    ),
+                    RegisterFormFields(),
                     CustomButton(
                       texto: 'Crear cuenta',
                       onPressed: () {},
@@ -59,63 +47,104 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-// class RegisterForm extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Form(
-//         child: Column(
-//           children: [
-//             TextFormField(
-//               autocorrect: false,
-//               keyboardType: TextInputType.emailAddress,
-//               decoration: InputDecorations.loginInputDecoration(
-//                 hintText: 'correo@correo.cl',
-//                 labelText: 'Correo electrónico',
-//                 prefixIcon: Icons.alternate_email,
-//               ),
-//             ),
-//             SizedBox(height: 30),
-//             TextFormField(
-//               autocorrect: false,
-//               keyboardType: TextInputType.text,
-//               decoration: InputDecorations.loginInputDecoration(
-//                 hintText: 'Nombre',
-//                 labelText: 'Nombre',
-//                 prefixIcon: Icons.perm_identity_outlined,
-//               ),
-//             ),
-//             SizedBox(height: 30),
-//             TextFormField(
-//               autocorrect: false,
-//               obscureText: true,
-//               keyboardType: TextInputType.emailAddress,
-//               decoration: InputDecorations.loginInputDecoration(
-//                 labelText: 'Password',
-//                 prefixIcon: Icons.lock_outline,
-//               ),
-//             ),
-//             SizedBox(height: 30),
-//             MaterialButton(
-//               shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(10)),
-//               disabledColor: Colors.grey,
-//               elevation: 0,
-//               color: Colors.deepPurple,
-//               child: Container(
-//                 padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-//                 child: Text(
-//                   'Ingresar',
-//                   style: TextStyle(color: Colors.white),
-//                 ),
-//               ),
-//               onPressed: () {
-//                 // TODO: implementar login
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+class RegisterFormFields extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // final loginForm = Provider.of<LoginFormProvider>(context);
+
+    return Container(
+      child: Form(
+        // key: loginForm.formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              autocorrect: false,
+              obscureText: false,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xffEA7B00),
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xffEA7B00),
+                    width: 2,
+                  ),
+                ),
+                hintText: 'Nombre',
+                labelText: 'Nombre',
+                labelStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                prefixIcon: Icon(
+                  Icons.perm_identity,
+                  color: Color(0xffEA7B00),
+                ),
+              ),
+            ),
+            TextFormField(
+              autocorrect: false,
+              obscureText: false,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xffEA7B00),
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xffEA7B00),
+                    width: 2,
+                  ),
+                ),
+                hintText: 'Correo electrónico',
+                labelText: 'Correo electrónico',
+                labelStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                prefixIcon: Icon(
+                  Icons.alternate_email_outlined,
+                  color: Color(0xffEA7B00),
+                ),
+              ),
+            ),
+            TextFormField(
+              autocorrect: false,
+              obscureText: true,
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xffEA7B00),
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xffEA7B00),
+                    width: 2,
+                  ),
+                ),
+                hintText: 'Password',
+                labelText: 'Password',
+                labelStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                prefixIcon: Icon(
+                  Icons.lock_outline,
+                  color: Color(0xffEA7B00),
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+}

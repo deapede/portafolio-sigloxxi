@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -66,10 +67,14 @@ class _CardPlates extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 150,
+        // height: 150,
         margin: EdgeInsets.only(top: 20),
         padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Text('Details Page'),
+        child: Column(
+          children: [
+            Text('Detalles page'),
+          ],
+        ),
       ),
     );
   }
@@ -92,17 +97,27 @@ class _ShoppingCartButton extends StatelessWidget {
           Positioned(
             top: 0.0,
             right: 0.0,
-            child: Container(
-              alignment: Alignment.center,
-              width: 13,
-              height: 13,
-              child: Text(
-                '${notificationProvider.number}',
-                style: TextStyle(color: Colors.white, fontSize: 7),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.redAccent,
-                shape: BoxShape.circle,
+            child: BounceInDown(
+              from: 10,
+              animate: (notificationProvider.number > 0) ? true : false,
+              child: Bounce(
+                from: 10,
+                controller: (controller) =>
+                    Provider.of<NotificationProvider>(context).bounceCtrl =
+                        controller,
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 13,
+                  height: 13,
+                  child: Text(
+                    '${notificationProvider.number}',
+                    style: TextStyle(color: Colors.white, fontSize: 7),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    shape: BoxShape.circle,
+                  ),
+                ),
               ),
             ),
           ),
@@ -115,3 +130,15 @@ class _ShoppingCartButton extends StatelessWidget {
     );
   }
 }
+
+
+// ! onpressed para cuando se agrega algo al carro de compras
+          // onPressed: () {
+          //   final notificationProvider =
+          //       Provider.of<NotificationProvider>(context, listen: false);
+          //   notificationProvider.number++;
+
+          //   if (notificationProvider.number >= 2) {
+          //     notificationProvider.bounceCtrl.forward(from: 0.0);
+          //   }
+          // },
