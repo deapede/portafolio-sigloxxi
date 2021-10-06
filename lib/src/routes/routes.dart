@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sigloxxi/src/pages/home.dart';
-import 'package:sigloxxi/src/pages/login.dart';
+import 'package:sigloxxi/src/pages/home_page.dart';
+import 'package:sigloxxi/src/pages/login_page.dart';
 import 'package:sigloxxi/src/pages/pages.dart';
-import 'package:sigloxxi/src/pages/register.dart';
+import 'package:sigloxxi/src/pages/register_page.dart';
 
 final Map<String, Widget Function(BuildContext)> appRoutes = {
   'login': (_) => LoginPage(),

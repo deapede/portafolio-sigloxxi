@@ -1,8 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:sigloxxi/src/providers/notification.dart';
+import 'package:sigloxxi/src/services/notification_service.dart';
 
 class DetailsPage extends StatelessWidget {
   @override
@@ -73,6 +72,17 @@ class _CardPlates extends StatelessWidget {
         child: Column(
           children: [
             Text('Detalles page'),
+            // TextButton(
+            //     onPressed: () {
+            //       final notificationProvider =
+            //           Provider.of<NotificationProvider>(context, listen: false);
+            //       notificationProvider.number++;
+
+            //       if (notificationProvider.number >= 2) {
+            //         notificationProvider.bounceCtrl.forward(from: 0.0);
+            //       }
+            //     },
+            //     child: Text('agregar'))
           ],
         ),
       ),
@@ -83,7 +93,7 @@ class _CardPlates extends StatelessWidget {
 class _ShoppingCartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final notificationProvider = Provider.of<NotificationProvider>(context);
+    final notificationProvider = Provider.of<NotificationService>(context);
 
     return FloatingActionButton(
       child: Stack(
@@ -103,7 +113,7 @@ class _ShoppingCartButton extends StatelessWidget {
               child: Bounce(
                 from: 10,
                 controller: (controller) =>
-                    Provider.of<NotificationProvider>(context).bounceCtrl =
+                    Provider.of<NotificationService>(context).bounceCtrl =
                         controller,
                 child: Container(
                   alignment: Alignment.center,
