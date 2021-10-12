@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sigloxxi/src/helpers/navegar_fadein.dart';
 import 'package:sigloxxi/src/pages/home_page.dart';
+import 'package:sigloxxi/src/providers/login_form_provider.dart';
 
 import 'package:sigloxxi/src/services/login_service.dart';
 import 'package:sigloxxi/src/helpers/mostrar_alerta.dart';
@@ -46,10 +47,11 @@ class LoginFormFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginService = Provider.of<LoginService>(context);
+    final loginFormProvider = Provider.of<LoginFormProvider>(context);
 
     return Container(
       child: Form(
-        key: loginService.formKey,
+        key: loginFormProvider.formKey,
         child: Column(
           children: [
             TextFormField(
@@ -79,7 +81,7 @@ class LoginFormFields extends StatelessWidget {
                   color: Color(0xffEA7B00),
                 ),
               ),
-              onChanged: (value) => loginService.email = value,
+              onChanged: (value) => loginFormProvider.email = value,
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor ingrese un correo';
@@ -96,7 +98,7 @@ class LoginFormFields extends StatelessWidget {
             ),
             TextFormField(
               autocorrect: false,
-              obscureText: loginService.passwordVisible,
+              obscureText: loginFormProvider.passwordVisible,
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
@@ -122,20 +124,20 @@ class LoginFormFields extends StatelessWidget {
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    loginService.passwordVisible
+                    loginFormProvider.passwordVisible
                         ? Icons.visibility
                         : Icons.visibility_off,
                     color: Color(0xffEA7B00),
                   ),
                   onPressed: () {
-                    loginService.passwordVisible =
-                        !loginService.passwordVisible;
+                    loginFormProvider.passwordVisible =
+                        !loginFormProvider.passwordVisible;
                   },
                 ),
               ),
-              onChanged: (value) => loginService.password = value,
+              onChanged: (value) => loginFormProvider.password = value,
               validator: (value) {
-                if (loginService.password.isEmpty) {
+                if (loginFormProvider.password.isEmpty) {
                   return 'Por favor ingrese su contraseña';
                 }
 
@@ -163,13 +165,13 @@ class LoginFormFields extends StatelessWidget {
                   : () async {
                       FocusScope.of(context).unfocus();
 
-                      if (!loginService.isValidForm()) return;
+                      if (!loginFormProvider.isValidForm()) return;
 
                       //* API login app
                       // appLogin(context, loginForm.email, loginForm.password);
                       final successfulLogin = await loginService.login(
-                        loginService.email.trim(),
-                        loginService.password.trim(),
+                        loginFormProvider.email.trim(),
+                        loginFormProvider.password.trim(),
                       );
 
                       if (successfulLogin) {
@@ -186,17 +188,5 @@ class LoginFormFields extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void appLogin(BuildContext context, String email, String password) async {
-    final loginService = Provider.of<LoginService>(context, listen: false);
-
-    final loginResponse =
-        await loginService.login(email.trim(), password.trim());
-
-    if (loginResponse.statusCode == 200) {
-      loginService.isLoading = true;
-      // Navigator.pushReplacementNamed(context, 'home');
-    }
   }
 }

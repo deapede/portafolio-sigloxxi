@@ -9,15 +9,8 @@ import 'package:sigloxxi/src/global/conexion.dart';
 import 'package:sigloxxi/src/models/login_response.dart';
 
 class LoginService extends ChangeNotifier {
-  GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-
-  String email = '';
-  String password = '';
   bool _isLoading = false;
-  bool _passwordVisible = true;
-
-  // Create storage
-  final _storage = new FlutterSecureStorage();
+  bool _isAuthenticate = false;
 
   bool get isLoading => this._isLoading;
   set isLoading(bool valor) {
@@ -25,11 +18,14 @@ class LoginService extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get passwordVisible => this._passwordVisible;
-  set passwordVisible(bool valor) {
-    this._passwordVisible = valor;
+  bool get isAuthenticate => this._isAuthenticate;
+  set isAuthenticate(bool valor) {
+    this._isAuthenticate = valor;
     notifyListeners();
   }
+
+  // Create storage
+  final _storage = new FlutterSecureStorage();
 
   // Getter del token
   static Future<String?> getToken() async {
@@ -41,10 +37,6 @@ class LoginService extends ChangeNotifier {
   static Future<void> deleteToken() async {
     final _storage = new FlutterSecureStorage();
     await _storage.delete(key: 'token');
-  }
-
-  bool isValidForm() {
-    return formKey.currentState?.validate() ?? false;
   }
 
   // * Path: /users/v1/login
@@ -76,5 +68,16 @@ class LoginService extends ChangeNotifier {
 
   Future logout() async {
     return await _storage.delete(key: 'token');
+  }
+
+  Future<bool> isLoggedIn() async {
+    final token = await this._storage.read(key: 'token');
+
+    if (token!.isNotEmpty) {
+      print(token);
+      return true;
+    } else {
+      return false;
+    }
   }
 }
