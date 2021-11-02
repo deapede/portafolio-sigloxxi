@@ -1,85 +1,46 @@
 // To parse this JSON data, do
 //
-//     final foodPlatesResponse = foodPlatesResponseFromMap(jsonString);
+//     final platesResponse = platesResponseFromMap(jsonString);
 
 import 'dart:convert';
 
-class PlateResponse {
-  PlateResponse({
-    this.previousPage,
-    this.nextPage,
-    required this.total,
-    required this.pages,
-    this.data,
-  });
-
-  int? previousPage;
-  int? nextPage;
-  int total;
-  int pages;
-  List<FoodPlatesResponse>? data;
-
-  factory PlateResponse.fromJson(String str) =>
-      PlateResponse.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory PlateResponse.fromMap(Map<String, dynamic> json) => PlateResponse(
-        previousPage: json["previous_page"],
-        nextPage: json["next_page"],
-        total: json["total"],
-        pages: json["pages"],
-        data: List<FoodPlatesResponse>.from(
-            json["data"].map((x) => FoodPlatesResponse.fromMap(x))),
-      );
-
-  Map<String, dynamic> toMap() => {
-        "previous_page": previousPage,
-        "next_page": nextPage,
-        "total": total,
-        "pages": pages,
-        "data": List<dynamic>.from(data!.map((x) => x.toMap())),
-      };
-}
-
-class FoodPlatesResponse {
-  FoodPlatesResponse({
-    required this.name,
-    required this.price,
+class PlatesResponse {
+  PlatesResponse({
     required this.description,
-    required this.link,
+    required this.price,
     required this.id,
-    // this.creation,
+    this.link,
+    required this.creation,
+    required this.name,
   });
 
-  String name;
-  int price;
   String description;
-  String link;
+  int price;
   int id;
-  // DateTime? creation;
+  String? link;
+  DateTime creation;
+  String name;
 
-  factory FoodPlatesResponse.fromJson(String str) =>
-      FoodPlatesResponse.fromMap(json.decode(str));
+  factory PlatesResponse.fromJson(String str) =>
+      PlatesResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory FoodPlatesResponse.fromMap(Map<String, dynamic> json) =>
-      FoodPlatesResponse(
-        name: json["name"],
-        price: json["price"],
+  factory PlatesResponse.fromMap(Map<String, dynamic> json) => PlatesResponse(
         description: json["description"],
-        link: json["link"],
+        price: json["price"],
         id: json["id"],
-        // creation: DateTime.parse(json["creation"]),
+        link: json["link"],
+        creation: DateTime.parse(json["creation"]),
+        name: json["name"],
       );
 
   Map<String, dynamic> toMap() => {
-        "name": name,
-        "price": price,
         "description": description,
-        "link": link,
+        "price": price,
         "id": id,
-        // "creation": creation!.toIso8601String(),
+        "link": link,
+        "creation": creation.toIso8601String(),
+        "name": name,
       };
 }

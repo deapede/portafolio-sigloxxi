@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -7,26 +9,21 @@ import 'package:sigloxxi/src/models/food_plates_response.dart';
 import 'package:sigloxxi/src/services/services.dart';
 
 class FoodPlateService extends ChangeNotifier {
-  List<PlateResponse> foodPlates = [];
+  List<PlatesResponse> foodPlates = [];
 
   FoodPlateService() {
-    this.getAllFoodPlates();
+    getAllFoodPlates();
   }
 
-  getAllFoodPlates() async {
-    final token = await LoginService.getToken();
-
-    final response = await http.get(
-      Uri.parse('${Conexion.apiUrl}/v1/food_plates/get_all_food_plates?page=1'),
-      headers: {
-        'token': token!,
-      },
-    );
-    print(response.body);
+  ///
+  Future<void> getAllFoodPlates() async {
+    final response = await http.get(Uri.parse(
+        '${Conexion.apiUrl}/v1/food_plates/get_all_food_plates_wjwt/'));
 
     if (response.statusCode == 200) {
-      final platesResponse = PlateResponse.fromJson(response.body);
-      this.foodPlates.add(platesResponse);
+      final bodyData = utf8.decode(response.bodyBytes);
+      final List<dynamic> jsonData = json.decode(bodyData);
+      foodPlates = jsonData.map((e) => PlatesResponse.fromMap(e)).toList();
       notifyListeners();
     }
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:sigloxxi/src/providers/login_form_provider.dart';
+import 'package:sigloxxi/src/providers/providers.dart';
 import 'package:sigloxxi/src/routes/routes.dart';
 import 'package:sigloxxi/src/services/services.dart';
 
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => NotificationService()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => LoginService()),
         ChangeNotifierProvider(create: (_) => LoginFormProvider()),
         ChangeNotifierProvider(create: (_) => FoodPlateService()),
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Restaurant Sigo XXI',
-        initialRoute: 'loading',
+        initialRoute: 'home',
         routes: appRoutes,
       ),
     );

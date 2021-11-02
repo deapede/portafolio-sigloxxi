@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class NotificationService extends ChangeNotifier {
+class NotificationProvider extends ChangeNotifier {
   int _number = 0;
   late AnimationController _bounceCtrl;
 

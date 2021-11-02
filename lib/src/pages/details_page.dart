@@ -1,20 +1,26 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
-import 'package:sigloxxi/src/services/notification_service.dart';
+import 'package:animate_do/animate_do.dart';
+
+import 'package:sigloxxi/src/providers/providers.dart';
+import 'package:sigloxxi/src/services/services.dart';
 
 class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final PlatesResponse foodPlatesService =
+        ModalRoute.of(context)!.settings.arguments as PlatesResponse;
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: [
-          _CustomAppBar(),
+          _CustomAppBar(foodPlate: foodPlatesService),
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                _CardPlates(),
+                _CardPlates(foodPlate: foodPlatesService),
+                _BotonAgregarRestar(),
               ],
             ),
           ),
@@ -25,7 +31,63 @@ class DetailsPage extends StatelessWidget {
   }
 }
 
+class _BotonAgregarRestar extends StatelessWidget {
+  const _BotonAgregarRestar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 50),
+      height: 50,
+      decoration: BoxDecoration(
+        color: Color(0xffFD9827),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 70,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  bottomLeft: Radius.circular(25)),
+            ),
+            child: Icon(Icons.add),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                '1',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          // Spacer(),
+          Container(
+            width: 70,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(25),
+                  bottomRight: Radius.circular(25)),
+            ),
+            child: Icon(Icons.remove),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _CustomAppBar extends StatelessWidget {
+  final PlatesResponse foodPlate;
+
+  const _CustomAppBar({Key? key, required this.foodPlate}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -43,7 +105,7 @@ class _CustomAppBar extends StatelessWidget {
           width: double.infinity,
           // height: 200,
           child: Text(
-            'plates.name',
+            foodPlate.name,
             style: TextStyle(
               color: Colors.white,
               fontSize: 17,
@@ -52,8 +114,7 @@ class _CustomAppBar extends StatelessWidget {
           ),
         ),
         background: Image(
-          // TODO cambiar imagen del appbar por la del plato en cuestion
-          image: AssetImage('assets/images/food-banner.jpg'),
+          image: NetworkImage(foodPlate.link!),
           fit: BoxFit.cover,
         ),
       ),
@@ -62,6 +123,9 @@ class _CustomAppBar extends StatelessWidget {
 }
 
 class _CardPlates extends StatelessWidget {
+  final PlatesResponse foodPlate;
+
+  const _CardPlates({Key? key, required this.foodPlate}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -71,18 +135,7 @@ class _CardPlates extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
-            Text('Detalles page'),
-            // TextButton(
-            //     onPressed: () {
-            //       final notificationProvider =
-            //           Provider.of<NotificationProvider>(context, listen: false);
-            //       notificationProvider.number++;
-
-            //       if (notificationProvider.number >= 2) {
-            //         notificationProvider.bounceCtrl.forward(from: 0.0);
-            //       }
-            //     },
-            //     child: Text('agregar'))
+            Text(foodPlate.description),
           ],
         ),
       ),
@@ -93,7 +146,7 @@ class _CardPlates extends StatelessWidget {
 class _ShoppingCartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final notificationProvider = Provider.of<NotificationService>(context);
+    final notificationProvider = Provider.of<NotificationProvider>(context);
 
     return FloatingActionButton(
       child: Stack(
@@ -113,7 +166,7 @@ class _ShoppingCartButton extends StatelessWidget {
               child: Bounce(
                 from: 10,
                 controller: (controller) =>
-                    Provider.of<NotificationService>(context).bounceCtrl =
+                    Provider.of<NotificationProvider>(context).bounceCtrl =
                         controller,
                 child: Container(
                   alignment: Alignment.center,
