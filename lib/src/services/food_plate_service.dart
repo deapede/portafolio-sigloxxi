@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:sigloxxi/src/global/conexion.dart';
-import 'package:sigloxxi/src/models/food_plates_response.dart';
+import 'package:sigloxxi/src/models/models.dart';
 
 import 'package:sigloxxi/src/services/services.dart';
 

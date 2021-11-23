@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sigloxxi/src/services/services.dart';
+import 'package:sigloxxi/src/widgets/custom_floating_button.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -22,7 +23,11 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: _ListViewFoodPlates(),
-      // floatingActionButton: ,
+      floatingActionButton: ShoppingCartButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'cart_page');
+        },
+      ),
     );
   }
 }

@@ -15,7 +15,7 @@ class ShoppingCartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notificationProvider = Provider.of<NotificationProvider>(context);
+    final notificationProvider = Provider.of<ShoppingCartProvider>(context);
 
     return FloatingActionButton(
       child: Stack(

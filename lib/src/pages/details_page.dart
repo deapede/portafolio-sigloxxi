@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:animate_do/animate_do.dart';
 
 import 'package:sigloxxi/src/providers/providers.dart';
 import 'package:sigloxxi/src/services/services.dart';
+import 'package:sigloxxi/src/widgets/custom_floating_button.dart';
 
 class DetailsPage extends StatelessWidget {
   @override
@@ -12,21 +12,144 @@ class DetailsPage extends StatelessWidget {
     final PlatesResponse foodPlatesService =
         ModalRoute.of(context)!.settings.arguments as PlatesResponse;
     return Scaffold(
-      body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
-        slivers: [
-          _CustomAppBar(foodPlate: foodPlatesService),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                _CardPlates(foodPlate: foodPlatesService),
-                _BotonAgregarRestar(),
-              ],
-            ),
+      appBar: AppBar(
+        backgroundColor: Color(0xffEA7B00),
+        elevation: 2,
+        centerTitle: true,
+        title: Text(
+          'Detalles',
+          style: TextStyle(
+            color: Colors.white,
+            letterSpacing: 1,
           ),
-        ],
+        ),
       ),
-      floatingActionButton: _ShoppingCartButton(),
+      body: _CardPlatos(foodPlatesService: foodPlatesService),
+      floatingActionButton: ShoppingCartButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'cart_page');
+        },
+      ),
+    );
+  }
+}
+
+class _CardPlatos extends StatelessWidget {
+  const _CardPlatos({
+    Key? key,
+    required this.foodPlatesService,
+  }) : super(key: key);
+
+  final PlatesResponse foodPlatesService;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 200,
+                    child: Image(
+                      image: NetworkImage(foodPlatesService.link!),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 5),
+                    alignment: Alignment.bottomCenter,
+                    color: Colors.black38,
+                    height: 200,
+                    width: double.infinity,
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Container(
+                height: 200,
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  elevation: 5,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              foodPlatesService.name,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(foodPlatesService.description),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Spacer(),
+        _BotonAgregarRestar(),
+        _BotonAgregarCarrito(foodPlatesService: foodPlatesService),
+      ],
+    );
+  }
+}
+
+class _BotonAgregarCarrito extends StatelessWidget {
+  const _BotonAgregarCarrito({
+    Key? key,
+    required this.foodPlatesService,
+  }) : super(key: key);
+
+  final PlatesResponse foodPlatesService;
+
+  @override
+  Widget build(BuildContext context) {
+    final cartProvider = Provider.of<ShoppingCartProvider>(context);
+    final precioTotal = foodPlatesService.price * cartProvider.quantity;
+    return GestureDetector(
+      child: Container(
+        margin: EdgeInsets.only(left: 50, right: 50, bottom: 90),
+        height: 50,
+        decoration: BoxDecoration(
+          color: Color(0xffFD9827),
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Agregar al carrito: \$ ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '$precioTotal',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        cartProvider.agregarProductos(
+            cartProvider.quantity, precioTotal, foodPlatesService.name);
+      },
     );
   }
 }
@@ -38,8 +161,9 @@ class _BotonAgregarRestar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<ShoppingCartProvider>(context);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 50),
+      margin: EdgeInsets.only(left: 50, right: 50, bottom: 10),
       height: 50,
       decoration: BoxDecoration(
         color: Color(0xffFD9827),
@@ -47,152 +171,52 @@ class _BotonAgregarRestar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 70,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  bottomLeft: Radius.circular(25)),
+          GestureDetector(
+            child: Container(
+              width: 70,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    bottomLeft: Radius.circular(25)),
+              ),
+              child: Icon(Icons.remove),
             ),
-            child: Icon(Icons.add),
+            onTap: () {
+              cartProvider.removeFromCart();
+            },
           ),
           Expanded(
             child: Container(
               alignment: Alignment.center,
               child: Text(
-                '1',
+                '${cartProvider.quantity}',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),
           // Spacer(),
-          Container(
-            width: 70,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(25),
-                  bottomRight: Radius.circular(25)),
-            ),
-            child: Icon(Icons.remove),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CustomAppBar extends StatelessWidget {
-  final PlatesResponse foodPlate;
-
-  const _CustomAppBar({Key? key, required this.foodPlate}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      backgroundColor: Color(0xff1F1F1F),
-      expandedHeight: 200,
-      elevation: 2,
-      pinned: true,
-      floating: false,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        titlePadding: EdgeInsets.all(0),
-        title: Container(
-          alignment: Alignment.bottomCenter,
-          color: Colors.black38,
-          width: double.infinity,
-          // height: 200,
-          child: Text(
-            foodPlate.name,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-              letterSpacing: 1,
-            ),
-          ),
-        ),
-        background: Image(
-          image: NetworkImage(foodPlate.link!),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-}
-
-class _CardPlates extends StatelessWidget {
-  final PlatesResponse foodPlate;
-
-  const _CardPlates({Key? key, required this.foodPlate}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        // height: 150,
-        margin: EdgeInsets.only(top: 20),
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            Text(foodPlate.description),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ShoppingCartButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final notificationProvider = Provider.of<NotificationProvider>(context);
-
-    return FloatingActionButton(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Icon(
-            Icons.shopping_cart_outlined,
-            color: Color(0xffFD9827),
-            size: 30,
-          ),
-          Positioned(
-            top: 0.0,
-            right: 0.0,
-            child: BounceInDown(
-              from: 10,
-              animate: (notificationProvider.number > 0) ? true : false,
-              child: Bounce(
-                from: 10,
-                controller: (controller) =>
-                    Provider.of<NotificationProvider>(context).bounceCtrl =
-                        controller,
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 13,
-                  height: 13,
-                  child: Text(
-                    '${notificationProvider.number}',
-                    style: TextStyle(color: Colors.white, fontSize: 7),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+          GestureDetector(
+            child: Container(
+              width: 70,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(25),
+                    bottomRight: Radius.circular(25)),
               ),
+              child: Icon(Icons.add),
             ),
+            onTap: () {
+              cartProvider.addToCart();
+            },
           ),
         ],
       ),
-      onPressed: () {
-        // TODO Implementar navegación a página de Carrito para generar orden.
-      },
-      backgroundColor: Color(0xff1F1F1F),
     );
   }
 }
+
 
 
 // ! onpressed para cuando se agrega algo al carro de compras

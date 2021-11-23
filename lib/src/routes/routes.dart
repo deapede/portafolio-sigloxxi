@@ -8,4 +8,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'register': (_) => RegisterPage(),
   'details': (_) => DetailsPage(),
   'loading': (_) => LoadingPage(),
+  'cart_page': (_) => CartPage(),
 };
