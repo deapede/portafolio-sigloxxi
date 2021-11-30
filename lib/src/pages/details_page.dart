@@ -148,7 +148,11 @@ class _BotonAgregarCarrito extends StatelessWidget {
       ),
       onTap: () {
         cartProvider.agregarProductos(
-            cartProvider.quantity, precioTotal, foodPlatesService.name);
+          cartProvider.quantity,
+          precioTotal,
+          foodPlatesService.name,
+          foodPlatesService.link!,
+        );
       },
     );
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 
 class ShoppingCartProvider extends ChangeNotifier {
-  int _number = 1;
-  int _quantity = 1;
+  int _number = 0;
+  int _quantity = 0;
   late int _price;
   late AnimationController _bounceCtrl;
-  List<Map<String, dynamic>> pedido = [{}];
+  List<Map<String, dynamic>> detalleOrden = [];
 
   int get number => this._number;
   int get quantity => this._quantity;
@@ -29,10 +29,7 @@ class ShoppingCartProvider extends ChangeNotifier {
   removeFromCart() {
     _quantity--;
     if (_quantity.isNegative) {
-      _quantity = 1;
-    }
-    if (_quantity == 0) {
-      _quantity = 1;
+      _quantity = 0;
     }
     notifyListeners();
   }
@@ -42,21 +39,30 @@ class ShoppingCartProvider extends ChangeNotifier {
     this._bounceCtrl = controller;
   }
 
-  agregarProductos(int cantidad, int precio, String producto) {
-    pedido = [
+  agregarProductos(int cantidad, int precio, String producto, String urlFoto) {
+    detalleOrden.add(
       {
-        // 'tableId':
-        // 'statusId':
-        // 'creation':
-        'order_details': {
-          'nombrePlato': producto,
-          'cantidad': cantidad,
-          'precio': precio,
-        }
+        'nombrePlato': producto,
+        'cantidad': cantidad,
+        'precio': precio,
+        'foto': urlFoto,
       },
-    ];
+    );
+
+    _number += cantidad;
+    print(_number);
+    _bounceCtrl.forward(from: 0.0);
 
     notifyListeners();
-    print(pedido);
+    // print(detalleOrden[0]['nombrePlato']);
+    // print('Detalle Orden: $detalleOrden');
+  }
+
+  void eliminarProductos(int index, int cantidad) {
+    detalleOrden.removeAt(index);
+    _number -= cantidad;
+    _bounceCtrl.forward();
+    notifyListeners();
+    print(_number);
   }
 }

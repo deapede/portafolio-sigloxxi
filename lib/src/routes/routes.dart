@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sigloxxi/src/pages/pages.dart';
 import 'package:sigloxxi/src/pages/register_page.dart';
+import 'package:sigloxxi/src/pages/tables_page.dart';
 
 final Map<String, Widget Function(BuildContext)> appRoutes = {
   'login': (_) => LoginPage(),
@@ -9,4 +10,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'details': (_) => DetailsPage(),
   'loading': (_) => LoadingPage(),
   'cart_page': (_) => CartPage(),
+  'tables': (_) => TablesPage(),
 };

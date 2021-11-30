@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sigloxxi/src/services/services.dart';
 import 'package:sigloxxi/src/widgets/custom_floating_button.dart';
@@ -23,10 +24,93 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: _ListViewFoodPlates(),
+      drawer: _Drawer(),
       floatingActionButton: ShoppingCartButton(
         onPressed: () {
           Navigator.pushNamed(context, 'cart_page');
         },
+      ),
+    );
+  }
+}
+
+class _Drawer extends StatelessWidget {
+  const _Drawer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Container(
+        child: Column(
+          children: [
+            /// Drawer header
+            Container(
+              height: 200,
+              color: Color(0xff1F1F1F),
+              child: DrawerHeader(
+                child: SvgPicture.asset('assets/svgs/cutlery.svg'),
+              ),
+            ),
+
+            /// Cuerpo
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      'Disponibilidad de mesas',
+                      style: TextStyle(
+                        color: Color(0xff1F1F1F),
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xff1F1F1F),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'tables');
+                    },
+                  ),
+                  Divider(color: Colors.grey),
+                  ListTile(
+                    title: Text(
+                      'Pagar cuenta',
+                      style: TextStyle(
+                        color: Color(0xff1F1F1F),
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xff1F1F1F),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'pagar_cuenta');
+                    },
+                  ),
+                  Divider(color: Colors.grey),
+                ],
+              ),
+            ),
+
+            // Spacer(),
+            // Container(
+            //   height: 70,
+            //   child: TextButton.icon(
+            //     onPressed: ,
+            //     icon: Icon(Icons.logout, color: Color(0xff1F1F1F)),
+            //     label: Text(
+            //       'Salir',
+            //       style: TextStyle(
+            //         color: Color(0xff1F1F1F),
+            //         // color: Color(0xffEA7B00),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -61,9 +145,12 @@ class _ListTilePlatos extends StatelessWidget {
         height: 100,
         width: 100,
         child: (foodPlate.link != null)
-            ? Image(
-                image: NetworkImage(foodPlate.link!),
-                fit: BoxFit.cover,
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image(
+                  image: NetworkImage(foodPlate.link!),
+                  fit: BoxFit.cover,
+                ),
               )
             : Image(
                 image: NetworkImage(
