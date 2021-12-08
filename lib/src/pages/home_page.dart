@@ -7,6 +7,8 @@ import 'package:sigloxxi/src/widgets/custom_floating_button.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final foodPlatesService = Provider.of<FoodPlateService>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -23,7 +25,11 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      body: _ListViewFoodPlates(),
+      body: RefreshIndicator(
+        onRefresh: foodPlatesService.refreshHandler,
+        color: Color(0xffEA7B00),
+        child: _ListViewFoodPlates(),
+      ),
       drawer: _Drawer(),
       floatingActionButton: ShoppingCartButton(
         onPressed: () {
@@ -41,6 +47,7 @@ class _Drawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginService = Provider.of<LoginService>(context);
     return Drawer(
       child: Container(
         child: Column(
@@ -67,7 +74,7 @@ class _Drawer extends StatelessWidget {
                     ),
                     trailing: Icon(
                       Icons.chevron_right,
-                      color: Color(0xff1F1F1F),
+                      color: Color(0xffEA7B00),
                     ),
                     onTap: () {
                       Navigator.pushNamed(context, 'tables');
@@ -76,20 +83,65 @@ class _Drawer extends StatelessWidget {
                   Divider(color: Colors.grey),
                   ListTile(
                     title: Text(
-                      'Pagar cuenta',
+                      'Detalle de Orden',
                       style: TextStyle(
                         color: Color(0xff1F1F1F),
                       ),
                     ),
                     trailing: Icon(
                       Icons.chevron_right,
-                      color: Color(0xff1F1F1F),
+                      color: Color(0xffEA7B00),
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, 'pagar_cuenta');
+                      Navigator.pushNamed(context, 'order_details');
                     },
                   ),
                   Divider(color: Colors.grey),
+                  ListTile(
+                    title: Text(
+                      'Cerrar Sesión',
+                      style: TextStyle(
+                        color: Color(0xff1F1F1F),
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xffEA7B00),
+                    ),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Text('¿Realmente desea cerrar sesión?'),
+                          actions: [
+                            TextButton(
+                              child: Text(
+                                'Cancelar',
+                                style: TextStyle(
+                                  color: Color(0xffEA7B00),
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            TextButton(
+                              child: Text(
+                                'Aceptar',
+                                style: TextStyle(
+                                  color: Color(0xffEA7B00),
+                                ),
+                              ),
+                              onPressed: () {
+                                loginService.logout();
+                                Navigator.popAndPushNamed(context, 'login');
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:sigloxxi/src/api/create_order_api.dart';
+import 'package:sigloxxi/src/models/create_order_response.dart';
 
 class ShoppingCartProvider extends ChangeNotifier {
   int _number = 0;
@@ -6,6 +8,7 @@ class ShoppingCartProvider extends ChangeNotifier {
   late int _price;
   late AnimationController _bounceCtrl;
   List<Map<String, dynamic>> detalleOrden = [];
+  List<OrdersDetail> orderList = [];
 
   int get number => this._number;
   int get quantity => this._quantity;
@@ -50,7 +53,7 @@ class ShoppingCartProvider extends ChangeNotifier {
     );
 
     _number += cantidad;
-    print(_number);
+    // print(_number);
     _bounceCtrl.forward(from: 0.0);
 
     notifyListeners();
@@ -58,11 +61,29 @@ class ShoppingCartProvider extends ChangeNotifier {
     // print('Detalle Orden: $detalleOrden');
   }
 
+  addProduct(int idPlato, int cantidad, String status) async {
+    final list =
+        OrdersDetail(foodPlateId: idPlato, quantity: cantidad, status: status);
+
+    orderList.add(list);
+    notifyListeners();
+    // print(orderList);
+  }
+
+  // Future<void> crearOrder(
+  //   int tableId,
+  //   int statusId,
+  //   List<OrdersDetail> orderDetail,
+  // ) async {
+  //   final response = await createOrder(tableId, statusId, orderList);
+  //   print(response);
+  // }
+
   void eliminarProductos(int index, int cantidad) {
     detalleOrden.removeAt(index);
     _number -= cantidad;
     _bounceCtrl.forward();
     notifyListeners();
-    print(_number);
+    // print(_number);
   }
 }

@@ -153,6 +153,9 @@ class _BotonAgregarCarrito extends StatelessWidget {
           foodPlatesService.name,
           foodPlatesService.link!,
         );
+
+        // cartProvider.addProduct(
+        //     foodPlatesService.id, cartProvider.quantity, 'Creada');
       },
     );
   }

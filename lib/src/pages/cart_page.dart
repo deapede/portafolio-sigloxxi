@@ -145,8 +145,12 @@ class _BuildListView extends StatelessWidget {
         ),
         Spacer(),
         CustomButton(
-          onPressed: () {
+          onPressed: () async {
             _alertaProcesando(context);
+            // await provider.crearOrder(5, 1, provider.orderList);
+            // Navigator.pop(context);
+            // _alertaExito(context);
+
             Future.delayed(
               Duration(milliseconds: 1500),
               () {

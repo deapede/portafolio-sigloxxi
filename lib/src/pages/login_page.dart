@@ -141,9 +141,9 @@ class LoginFormFields extends StatelessWidget {
                   return 'Por favor ingrese su contraseña';
                 }
 
-                return (value != null && value.length >= 6)
-                    ? null
-                    : 'La contraseña debe ser de 6 caracteres';
+                // return (value != null && value.length >= 6)
+                //     ? null
+                //     : 'La contraseña debe ser de 6 caracteres';
               },
             ),
             SizedBox(height: 30),
@@ -164,8 +164,8 @@ class LoginFormFields extends StatelessWidget {
                   ? null
                   : () async {
                       FocusScope.of(context).unfocus();
-
                       if (!loginFormProvider.isValidForm()) return;
+                      loginService.isLoading = true;
 
                       //* API login app
                       // appLogin(context, loginForm.email, loginForm.password);
@@ -182,6 +182,7 @@ class LoginFormFields extends StatelessWidget {
                         mostrarAlerta(context, '¡Login Erroneo!',
                             'Email o contraseña incorrecta');
                       }
+                      loginService.isLoading = false;
                     },
             ),
           ],

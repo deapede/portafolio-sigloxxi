@@ -27,4 +27,8 @@ class FoodPlateService extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> refreshHandler() async {
+    getAllFoodPlates();
+  }
 }

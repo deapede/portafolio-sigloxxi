@@ -42,8 +42,6 @@ class LoginService extends ChangeNotifier {
   // * Path: /users/v1/login
   // !Login endpoint
   Future login(String email, String password) async {
-    this.isLoading = true;
-
     final data = {'email': email, 'password': password};
 
     final response = await http.post(
@@ -56,6 +54,7 @@ class LoginService extends ChangeNotifier {
     if (response.statusCode == 200) {
       final loginResponse = loginResponseFromJson(response.body);
       await this._guardarToken(loginResponse.accessToken);
+      // print(loginResponse.accessToken);
       return true;
     } else {
       return false;
@@ -73,8 +72,8 @@ class LoginService extends ChangeNotifier {
   Future<bool> isLoggedIn() async {
     final token = await this._storage.read(key: 'token');
 
-    if (token!.isNotEmpty) {
-      print(token);
+    if (token != null) {
+      // print(token);
       return true;
     } else {
       return false;

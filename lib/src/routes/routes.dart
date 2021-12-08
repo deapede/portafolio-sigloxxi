@@ -11,4 +11,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'loading': (_) => LoadingPage(),
   'cart_page': (_) => CartPage(),
   'tables': (_) => TablesPage(),
+  'order_details': (_) => OrderDetailPage(),
 };

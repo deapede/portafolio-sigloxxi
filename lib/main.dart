@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:sigloxxi/src/models/models.dart';
 
 import 'package:sigloxxi/src/providers/providers.dart';
 import 'package:sigloxxi/src/routes/routes.dart';
@@ -17,11 +18,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginService()),
         ChangeNotifierProvider(create: (_) => LoginFormProvider()),
         ChangeNotifierProvider(create: (_) => FoodPlateService()),
+        ChangeNotifierProvider(create: (_) => TablesService()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Restaurant Sigo XXI',
-        initialRoute: 'home',
+        initialRoute: 'loading',
         routes: appRoutes,
       ),
     );
